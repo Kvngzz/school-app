@@ -1,8 +1,18 @@
+import os
 from pymongo import MongoClient
 
 def get_connection():
-    client = MongoClient("mongodb://localhost:27017/")
 
-    db = client["student_db"]
+    mongo_uri = os.getenv("MONGO_URI")
+
+    if not mongo_uri:
+        raise ValueError("MONGO_URI environment variable is missing")
+
+    client = MongoClient(
+        mongo_uri,
+        serverSelectionTimeoutMS=10000
+    )
+
+    db = client["school"]
 
     return db
